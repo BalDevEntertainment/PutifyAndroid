@@ -1,4 +1,4 @@
-package com.baldev.putify.view;
+package com.baldev.putify.views;
 
 public interface SendMessageView {
 

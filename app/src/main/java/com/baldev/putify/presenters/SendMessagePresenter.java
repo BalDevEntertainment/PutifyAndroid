@@ -1,7 +1,8 @@
-package com.baldev.putify.presenter;
+package com.baldev.putify.presenters;
 
 import android.text.Editable;
 
+import com.baldev.putify.helpers.VolleyHelper;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -15,6 +16,7 @@ public class SendMessagePresenter implements MessagePresenter {
 			DatabaseReference myRef = database.getReference("message");
 
 			myRef.setValue(messageText);
+
 		}
 	}
 }

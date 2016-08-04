@@ -1,4 +1,4 @@
-package com.baldev.putify.presenter;
+package com.baldev.putify.presenters;
 
 import android.text.Editable;
 
