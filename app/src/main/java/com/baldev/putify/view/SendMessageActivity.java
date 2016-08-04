@@ -2,7 +2,7 @@ package com.baldev.putify.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageButton;
+import android.widget.EditText;
 
 import com.baldev.putify.R;
 import com.baldev.putify.presenter.MessagePresenter;
@@ -14,8 +14,7 @@ import butterknife.OnClick;
 
 public class SendMessageActivity extends AppCompatActivity implements SendMessageView {
 
-	@BindView(R.id.button_send_message) ImageButton sendButton;
-
+	@BindView(R.id.edit_text_message) EditText messageEditText;
 	private MessagePresenter presenter;
 
 	@Override
@@ -30,6 +29,6 @@ public class SendMessageActivity extends AppCompatActivity implements SendMessag
 	@Override
 	@OnClick(R.id.button_send_message)
 	public void onSendPressed() {
-		presenter.sendMessage();
+		presenter.sendMessage(messageEditText.getText());
 	}
 }

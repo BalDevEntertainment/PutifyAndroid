@@ -1,9 +1,8 @@
 package com.baldev.putify.presenter;
 
-/**
- * Created by Ariel on 03/08/2016.
- */
+import android.text.Editable;
+
 public interface MessagePresenter {
 
-	void sendMessage();
+	void sendMessage(Editable text);
 }
