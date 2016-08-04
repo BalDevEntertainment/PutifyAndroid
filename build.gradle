@@ -2,6 +2,15 @@
 
 buildscript {
     repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+    }
+}
+
+buildscript {
+    repositories {
         jcenter()
     }
     dependencies {

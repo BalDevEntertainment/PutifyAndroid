@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "446216690491",
+    "firebase_url": "https://putify-6adfc.firebaseio.com",
+    "project_id": "putify-6adfc",
+    "storage_bucket": "putify-6adfc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446216690491:android:da9d9ff57c49f8df",
+        "android_client_info": {
+          "package_name": "com.baldev.putify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446216690491-kv5aen931ugkmatavva6cfd3se86pgm9.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "446216690491-n0vbkkocqicptgj3cdedtpqa6j19t3ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHI1y5Ks7cWom6TkbOvalg_4xCXrHCzTI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
