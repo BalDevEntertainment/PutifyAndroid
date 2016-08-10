@@ -9,6 +9,7 @@ public class PutifyFCMService extends FirebaseMessagingService {
 	@Override
 	public void onMessageReceived(RemoteMessage remoteMessage) {
 		Log.d("FCM", remoteMessage.getNotification().getTitle());
+
 		Log.d("FCM", remoteMessage.getNotification().getBody());
 	}
 
