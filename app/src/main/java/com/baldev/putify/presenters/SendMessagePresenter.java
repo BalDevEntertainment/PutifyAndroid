@@ -1,21 +1,32 @@
 package com.baldev.putify.presenters;
 
+import android.content.Context;
 import android.text.Editable;
+import android.util.Log;
 
+import com.baldev.putify.helpers.FirebaseHelper.TokenCallback;
 import com.baldev.putify.helpers.VolleyHelper;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.baldev.putify.helpers.VolleyHelperImplementation;
 
 public class SendMessagePresenter implements MessagePresenter {
 
-	@Override
-	public void sendMessage(Editable editable) {
-		if (editable != null) {
-			String messageText = editable.toString();
-			FirebaseDatabase database = FirebaseDatabase.getInstance();
-			DatabaseReference myRef = database.getReference("message");
+	VolleyHelper volleyHelper = VolleyHelperImplementation.getInstance();
 
-			myRef.setValue(messageText);
+	@Override
+	public void sendMessage(final Context context, Editable editable) {
+		if (editable != null) {
+			final String messageText = editable.toString();
+			firebaseHelper.getRandomToken(new TokenCallback() {
+				@Override
+				public void onTokenRetrieved(String token) {
+					volleyHelper.sendPushNotification(context, token, "Alto title", messageText);
+				}
+
+				@Override
+				public void onError() {
+					Log.e("Error", "Error");
+				}
+			});
 
 		}
 	}
