@@ -35,8 +35,8 @@
             android:id="@+id/button_send_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/black"
             android:contentDescription="@null"
-            android:tint="@android:color/black"
             android:foregroundTint="@android:color/white"
             android:src="@android:drawable/ic_menu_send">
 

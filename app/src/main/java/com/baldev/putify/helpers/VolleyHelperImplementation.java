@@ -21,9 +21,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VolleyHelperImplementation implements VolleyHelper {
+public class VolleyHelperImplementation implements PushNotificationsManager {
 
-	private static VolleyHelper instance = new VolleyHelperImplementation();
+	private static PushNotificationsManager instance = new VolleyHelperImplementation();
 
 	public static final String URL_FCM = "https://fcm.googleapis.com/fcm/send";
 	public static final String KEY_TO = "to";
@@ -31,7 +31,7 @@ public class VolleyHelperImplementation implements VolleyHelper {
 	public static final String KEY_BODY = "body";
 	public static final String KEY_TITLE = "title";
 
-	public static VolleyHelper getInstance() {
+	public static PushNotificationsManager getInstance() {
 		return instance;
 	}
 

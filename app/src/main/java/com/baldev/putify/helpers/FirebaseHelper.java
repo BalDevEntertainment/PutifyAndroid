@@ -6,11 +6,20 @@ public interface FirebaseHelper {
 
 	void registerFCMToken(String token);
 
-	void getRandomToken(TokenCallback callback);
+	void getRandomToken(FirebaseTokenCallback callback);
 
-	interface TokenCallback {
+	void sendMessage(String to, String message);
+
+	void registerListenerForMessages(FirebaseMessageListener listener);
+
+	interface FirebaseTokenCallback {
 		void onTokenRetrieved(String string);
 
 		void onError();
 	}
+
+	interface FirebaseMessageListener {
+		void onNewMessage(String message);
+	}
+
 }

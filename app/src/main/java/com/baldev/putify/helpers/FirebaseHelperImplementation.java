@@ -1,8 +1,8 @@
 package com.baldev.putify.helpers;
 
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.util.Log;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,9 +17,13 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 
 	private static FirebaseHelperImplementation ourInstance = new FirebaseHelperImplementation();
 	private static final String REFERENCE_USERS = "users";
+	private static final String REFERENCE_MESSAGES = "messages";
 	private static final String KEY_TOKEN = "firebaseToken";
+	private static final String KEY_MESSAGE = "message";
+	private static final String KEY_TO = "to";
 	private FirebaseDatabase database;
 	private DatabaseReference usersReference;
+	private DatabaseReference messagesReference;
 	private String refreshedToken;
 
 	public static FirebaseHelper getInstance() {
@@ -33,13 +37,16 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 	private void setupReferences() {
 		database = FirebaseDatabase.getInstance();
 		usersReference = database.getReference(REFERENCE_USERS);
+		messagesReference = database.getReference(REFERENCE_MESSAGES);
 	}
 
 	@Override
 	public void registerCurrentFCMToken() {
 		refreshedToken = FirebaseInstanceId.getInstance().getToken();
 		Log.i("FCMTOKEN", refreshedToken != null ? refreshedToken : "Missing");
-		registerFCMToken(refreshedToken);
+		if(refreshedToken != null){
+			registerFCMToken(refreshedToken);
+		}
 	}
 
 	@Override
@@ -49,7 +56,7 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 	}
 
 	@Override
-	public void getRandomToken(final TokenCallback callback) {
+	public void getRandomToken(final FirebaseTokenCallback callback) {
 		usersReference.addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
@@ -57,6 +64,43 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 				DataSnapshot randomElement = random(collection);
 				String token = randomElement.getKey();
 				callback.onTokenRetrieved(token);
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+
+			}
+		});
+	}
+
+	@Override
+	public void sendMessage(String to, String message) {
+		DatabaseReference newMessage = messagesReference.push();
+		newMessage.child(KEY_MESSAGE).setValue(message);
+		newMessage.child(KEY_TO).setValue(to);
+	}
+
+	@Override
+	public void registerListenerForMessages(final FirebaseMessageListener listener) {
+		messagesReference.addChildEventListener(new ChildEventListener() {
+			@Override
+			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+				listener.onNewMessage(dataSnapshot.child("message").getValue().toString());
+			}
+
+			@Override
+			public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+			}
+
+			@Override
+			public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+			}
+
+			@Override
+			public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
 			}
 
 			@Override
