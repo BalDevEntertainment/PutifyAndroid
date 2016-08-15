@@ -26,24 +26,23 @@ public class MessagesActivity extends AppCompatActivity implements MessagesMVP.V
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_send_message);
+		this.setContentView(R.layout.activity_send_message);
 		ButterKnife.bind(this);
 
 		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 		layoutManager.setReverseLayout(true);
-		messagesRecyclerView.setLayoutManager(layoutManager);
-		adapter = new MessagesAdapter();
-		messagesRecyclerView.setAdapter(adapter);
+		this.messagesRecyclerView.setLayoutManager(layoutManager);
+		this.adapter = new MessagesAdapter();
+		this.messagesRecyclerView.setAdapter(this.adapter);
 
-		presenter.setAdapter(adapter);
-
+		this.presenter.setAdapter(this.adapter);
 	}
 
 
 	@Override
 	@OnClick(R.id.button_send_message)
 	public void onSendPressed() {
-		presenter.sendMessage(this, messageEditText.getText());
-		messageEditText.setText("");
+		this.presenter.sendMessage(this, this.messageEditText.getText());
+		this.messageEditText.setText("");
 	}
 }

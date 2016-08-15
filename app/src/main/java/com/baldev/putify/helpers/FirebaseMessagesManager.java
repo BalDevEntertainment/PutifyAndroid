@@ -15,8 +15,8 @@ public class FirebaseMessagesManager implements MessagesManager {
 	public FirebaseMessagesManager(final Context context, NewMessageListener newMessageListener) {
 		this.context = context;
 		this.listener = newMessageListener;
-		firebaseHelper.registerCurrentFCMToken();
-		firebaseHelper.registerListenerForMessages(new FirebaseMessageListener() {
+		this.firebaseHelper.registerCurrentFCMToken();
+		this.firebaseHelper.registerListenerForMessages(new FirebaseMessageListener() {
 			@Override
 			public void onNewMessage(String message) {
 				listener.onNewMessage(message);
@@ -26,13 +26,13 @@ public class FirebaseMessagesManager implements MessagesManager {
 
 	@Override
 	public void sendMessage(String to, String message) {
-		firebaseHelper.sendMessage(to, message);
-		pushNotificationsManager.sendPushNotification(context, to, "You have a new message!", message);
+		this.firebaseHelper.sendMessage(to, message);
+		this.pushNotificationsManager.sendPushNotification(context, to, "You have a new message!", message);
 	}
 
 	@Override
 	public void getRandomToken(final TokenCallback callback) {
-		firebaseHelper.getRandomToken(new FirebaseTokenCallback() {
+		this.firebaseHelper.getRandomToken(new FirebaseTokenCallback() {
 			@Override
 			public void onTokenRetrieved(String string) {
 				callback.onTokenRetrieved(string);
@@ -40,7 +40,7 @@ public class FirebaseMessagesManager implements MessagesManager {
 
 			@Override
 			public void onError() {
-
+				callback.onError();
 			}
 		});
 	}

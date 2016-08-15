@@ -17,14 +17,14 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 	private MessagesAdapter adapter; //Implement Nullable Pattern
 
 	public MessagesPresenter(Context context) {
-		messagesManager = new FirebaseMessagesManager(context, this);
+		this.messagesManager = new FirebaseMessagesManager(context, this);
 	}
 
 	@Override
 	public void sendMessage(final Context context, Editable editable) {
 		if (editable != null) {
 			final String messageText = editable.toString();
-			messagesManager.getRandomToken(new MessagesManager.TokenCallback() {
+			this.messagesManager.getRandomToken(new MessagesManager.TokenCallback() {
 				@Override
 				public void onTokenRetrieved(String token) {
 					messagesManager.sendMessage(token, messageText);
@@ -46,9 +46,9 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 
 	@Override
 	public void onNewMessage(String message) {
-		if (adapter != null) { //TODO remove on Nullable patter implementation
+		if (this.adapter != null) { //TODO remove on Nullable patter implementation
 			Message newMessage = new Message(message);
-			adapter.addMessage(newMessage);
+			this.adapter.addMessage(newMessage);
 		}
 	}
 }
