@@ -15,6 +15,8 @@ import java.util.Collection;
 
 public class FirebaseHelperImplementation implements FirebaseHelper {
 
+	public static final String FCM_TOKEN = "FCMTOKEN";
+	public static final String MISSING = "Missing";
 	private static FirebaseHelperImplementation ourInstance = new FirebaseHelperImplementation();
 	private static final String REFERENCE_USERS = "users";
 	private static final String REFERENCE_MESSAGES = "messages";
@@ -35,29 +37,29 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 	}
 
 	private void setupReferences() {
-		database = FirebaseDatabase.getInstance();
-		usersReference = database.getReference(REFERENCE_USERS);
-		messagesReference = database.getReference(REFERENCE_MESSAGES);
+		this.database = FirebaseDatabase.getInstance();
+		this.usersReference = this.database.getReference(REFERENCE_USERS);
+		this.messagesReference = this.database.getReference(REFERENCE_MESSAGES);
 	}
 
 	@Override
 	public void registerCurrentFCMToken() {
-		refreshedToken = FirebaseInstanceId.getInstance().getToken();
-		Log.i("FCMTOKEN", refreshedToken != null ? refreshedToken : "Missing");
-		if(refreshedToken != null){
-			registerFCMToken(refreshedToken);
+		this.refreshedToken = FirebaseInstanceId.getInstance().getToken();
+		Log.i(FCM_TOKEN, this.refreshedToken != null ? this.refreshedToken : MISSING);
+		if (this.refreshedToken != null) {
+			this.registerFCMToken(this.refreshedToken);
 		}
 	}
 
 	@Override
 	public void registerFCMToken(String token) {
-		DatabaseReference userToken = usersReference.child(token);
+		DatabaseReference userToken = this.usersReference.child(token);
 		userToken.child(KEY_TOKEN).setValue(token);
 	}
 
 	@Override
 	public void getRandomToken(final FirebaseTokenCallback callback) {
-		usersReference.addValueEventListener(new ValueEventListener() {
+		this.usersReference.addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Collection<DataSnapshot> collection = makeCollection(dataSnapshot.getChildren());
@@ -75,14 +77,14 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 
 	@Override
 	public void sendMessage(String to, String message) {
-		DatabaseReference newMessage = messagesReference.push();
+		DatabaseReference newMessage = this.messagesReference.push();
 		newMessage.child(KEY_MESSAGE).setValue(message);
 		newMessage.child(KEY_TO).setValue(to);
 	}
 
 	@Override
 	public void registerListenerForMessages(final FirebaseMessageListener listener) {
-		messagesReference.addChildEventListener(new ChildEventListener() {
+		this.messagesReference.addChildEventListener(new ChildEventListener() {
 			@Override
 			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 				listener.onNewMessage(dataSnapshot.child("message").getValue().toString());
@@ -113,7 +115,7 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 	public Collection<DataSnapshot> makeCollection(Iterable<DataSnapshot> iter) {
 		Collection<DataSnapshot> list = new ArrayList<>();
 		for (DataSnapshot item : iter) {
-			if (!item.getKey().equals(refreshedToken)) {
+			if (!item.getKey().equals(this.refreshedToken)) {
 				list.add(item);
 			}
 		}
@@ -125,6 +127,4 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 		for (T t : coll) if (--num < 0) return t;
 		throw new AssertionError();
 	}
-
-
 }

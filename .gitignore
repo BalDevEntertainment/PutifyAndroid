@@ -38,3 +38,33 @@ captures/
 
 # Keystore files
 *.jks
+/.idea/misc.xml
+/.idea/encodings.xml
+/.idea/modules.xml
+/.idea/runConfigurations.xml
+/.idea/gradle.xml
+/.idea/compiler.xml
+/.idea/libraries/play_services_basement_9_2_1.xml
+/.idea/libraries/cardview_v7_23_3_0.xml
+/.idea/libraries/butterknife_annotations_8_2_1.xml
+/.idea/libraries/butterknife_8_2_1.xml
+/.idea/libraries/firebase_database_9_2_1.xml
+/.idea/libraries/firebase_messaging_9_2_1.xml
+/.idea/libraries/firebase_database_connection_9_2_1.xml
+/.idea/libraries/appcompat_v7_23_3_0.xml
+/.idea/libraries/firebase_analytics_impl_9_2_1.xml
+/.idea/libraries/animated_vector_drawable_23_3_0.xml
+/.idea/libraries/junit_4_12.xml
+/.idea/libraries/support_v4_23_3_0.xml
+/.idea/libraries/hamcrest_core_1_3.xml
+/.idea/libraries/firebase_common_9_2_1.xml
+/.idea/libraries/play_services_tasks_9_2_1.xml
+/.idea/libraries/support_annotations_24_0_0.xml
+/.idea/libraries/firebase_analytics_9_2_1.xml
+/.idea/libraries/recyclerview_v7_23_3_0.xml
+/.idea/libraries/support_vector_drawable_23_3_0.xml
+/.idea/libraries/volley_1_0_0.xml
+/.idea/libraries/firebase_iid_9_2_1.xml
+/.idea/libraries/play_services_base_9_2_1.xml
+/.idea/libraries/firebase_core_9_2_1.xml
+/.idea/vcs.xml
