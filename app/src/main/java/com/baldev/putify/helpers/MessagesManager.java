@@ -4,9 +4,13 @@ package com.baldev.putify.helpers;
 
 public interface MessagesManager {
 
+	void askForToken(TokenCallback callback);
+
 	void sendMessage(String to, String message);
 
 	void getRandomToken(TokenCallback callback);
+
+	boolean hasTokenBeenRetrieved();
 
 	interface NewMessageListener {
 		void onNewMessage(String message);

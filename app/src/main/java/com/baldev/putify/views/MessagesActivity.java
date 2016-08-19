@@ -61,7 +61,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesMVP.V
 	@OnClick(R.id.button_send_message)
 	public void onSendPressed() {
 		this.presenter.sendMessage(this, this.messageEditText.getText());
-		clearMessageField();
+		this.clearMessageField();
 	}
 
 	private void clearMessageField() {

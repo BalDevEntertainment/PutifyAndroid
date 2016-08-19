@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Putify</string>
+    <string name="loggin_in">Loggin in</string>
 </resources>

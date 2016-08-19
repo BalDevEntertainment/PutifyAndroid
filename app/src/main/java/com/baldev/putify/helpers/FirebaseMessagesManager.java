@@ -12,10 +12,14 @@ public class FirebaseMessagesManager implements MessagesManager {
 	private final Context context;
 	private NewMessageListener listener;
 
+	public FirebaseMessagesManager(final Context context) {
+		this.context = context;
+	}
+
 	public FirebaseMessagesManager(final Context context, NewMessageListener newMessageListener) {
 		this.context = context;
 		this.listener = newMessageListener;
-		this.firebaseHelper.registerCurrentFCMToken();
+		this.firebaseHelper.registerFCMToken();
 		this.firebaseHelper.registerListenerForMessages(new FirebaseMessageListener() {
 			@Override
 			public void onNewMessage(String message) {
@@ -24,10 +28,26 @@ public class FirebaseMessagesManager implements MessagesManager {
 		});
 	}
 
+	public void askForToken(final TokenCallback callback) {
+		this.firebaseHelper.askForToken(new FirebaseTokenCallback() {
+			@Override
+			public void onTokenRetrieved(String string) {
+				callback.onTokenRetrieved(string);
+			}
+
+			@Override
+			public void onError() {
+				callback.onError();
+			}
+		});
+	}
+
 	@Override
 	public void sendMessage(String to, String message) {
+		String myToken = this.firebaseHelper.getMyToken();
+		this.firebaseHelper.sendMessage(myToken, message);
 		this.firebaseHelper.sendMessage(to, message);
-		this.pushNotificationsManager.sendPushNotification(context, to, "You have a new message!", message);
+		this.pushNotificationsManager.sendPushNotification(context, to, "You have been Putified!", message);
 	}
 
 	@Override
@@ -45,10 +65,16 @@ public class FirebaseMessagesManager implements MessagesManager {
 		});
 	}
 
-	//TODO remove this is temporal
-	public static void registerTokenTEMPORAL(){
+	@Override
+	public boolean hasTokenBeenRetrieved() {
+		String myToken = this.firebaseHelper.getMyToken();
+		return myToken != null && !myToken.equals("");
+	}
+
+	public static void registerToken() {
 		FirebaseHelper firebaseHelper = FirebaseHelperImplementation.getInstance();
-		firebaseHelper.registerCurrentFCMToken();
+		firebaseHelper.registerFCMToken();
+		firebaseHelper.notifyTokenRegistration();
 	}
 
 }

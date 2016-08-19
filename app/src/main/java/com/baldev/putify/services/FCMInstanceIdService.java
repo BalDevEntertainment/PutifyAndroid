@@ -15,7 +15,8 @@ public class FCMInstanceIdService extends FirebaseInstanceIdService {
 		Log.i("FCMTOKEN", refreshedToken != null ? refreshedToken : "Missing");
 
 		//TODO improve this is only temporal
-		FirebaseMessagesManager.registerTokenTEMPORAL();
+		FirebaseMessagesManager.registerToken();
+
 
 	}
 }

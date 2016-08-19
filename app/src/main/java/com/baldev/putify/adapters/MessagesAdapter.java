@@ -22,8 +22,7 @@ public class MessagesAdapter extends RecyclerView.Adapter {
 	@Override
 	public MessageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
-		MessageHolder messageHolder = new MessageHolder(view);
-		return messageHolder;
+		return new MessageHolder(view);
 	}
 
 	@Override
@@ -45,7 +44,6 @@ public class MessagesAdapter extends RecyclerView.Adapter {
 	}
 
 	public static class MessageHolder extends RecyclerView.ViewHolder {
-		// each data item is just a string in this case
 		@BindView(R.id.text_view_message_body) public TextView body;
 
 		public MessageHolder(View view) {

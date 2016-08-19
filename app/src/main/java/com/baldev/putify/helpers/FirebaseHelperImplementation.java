@@ -1,7 +1,6 @@
 package com.baldev.putify.helpers;
 
-import android.util.Log;
-
+import com.baldev.putify.helpers.MessagesManager.TokenCallback;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,44 +16,48 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 
 	public static final String FCM_TOKEN = "FCMTOKEN";
 	public static final String MISSING = "Missing";
-	private static FirebaseHelperImplementation ourInstance = new FirebaseHelperImplementation();
 	private static final String REFERENCE_USERS = "users";
 	private static final String REFERENCE_MESSAGES = "messages";
 	private static final String KEY_TOKEN = "firebaseToken";
 	private static final String KEY_MESSAGE = "message";
-	private static final String KEY_TO = "to";
+	private static FirebaseHelperImplementation ourInstance = new FirebaseHelperImplementation();
 	private FirebaseDatabase database;
 	private DatabaseReference usersReference;
 	private DatabaseReference messagesReference;
-	private String refreshedToken;
+	private DatabaseReference myMessagesReference; //TODO see how to avoid null
+	private String myToken;
+	private FirebaseTokenCallback tokenCallback;
 
 	public static FirebaseHelper getInstance() {
 		return ourInstance;
 	}
 
 	private FirebaseHelperImplementation() {
-		this.setupReferences();
-	}
-
-	private void setupReferences() {
-		this.database = FirebaseDatabase.getInstance();
-		this.usersReference = this.database.getReference(REFERENCE_USERS);
-		this.messagesReference = this.database.getReference(REFERENCE_MESSAGES);
+		this.myToken = FirebaseInstanceId.getInstance().getToken();
 	}
 
 	@Override
-	public void registerCurrentFCMToken() {
-		this.refreshedToken = FirebaseInstanceId.getInstance().getToken();
-		Log.i(FCM_TOKEN, this.refreshedToken != null ? this.refreshedToken : MISSING);
-		if (this.refreshedToken != null) {
-			this.registerFCMToken(this.refreshedToken);
+	public void registerFCMToken() {
+		this.myToken = FirebaseInstanceId.getInstance().getToken();
+		this.setupReferences();
+	}
+
+	@Override
+	public void notifyTokenRegistration() {
+		if (tokenCallback != null) {
+			tokenCallback.onTokenRetrieved(this.myToken);
 		}
 	}
 
 	@Override
-	public void registerFCMToken(String token) {
-		DatabaseReference userToken = this.usersReference.child(token);
-		userToken.child(KEY_TOKEN).setValue(token);
+	public void askForToken(FirebaseTokenCallback callback) {
+		this.tokenCallback = callback;
+		FirebaseInstanceId.getInstance().getToken();
+	}
+
+	@Override
+	public String getMyToken() {
+		return myToken;
 	}
 
 	@Override
@@ -70,24 +73,28 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 
 			@Override
 			public void onCancelled(DatabaseError databaseError) {
-
+				callback.onError();
 			}
 		});
 	}
 
 	@Override
 	public void sendMessage(String to, String message) {
-		DatabaseReference newMessage = this.messagesReference.push();
+		DatabaseReference receiverMessagesReference = messagesReference.child(to);
+		DatabaseReference newMessage = receiverMessagesReference.push();
 		newMessage.child(KEY_MESSAGE).setValue(message);
-		newMessage.child(KEY_TO).setValue(to);
 	}
+
 
 	@Override
 	public void registerListenerForMessages(final FirebaseMessageListener listener) {
-		this.messagesReference.addChildEventListener(new ChildEventListener() {
+		this.myMessagesReference.addChildEventListener(new ChildEventListener() {
 			@Override
 			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-				listener.onNewMessage(dataSnapshot.child("message").getValue().toString());
+				Object message = dataSnapshot.child("message").getValue();
+				if (message != null) {
+					listener.onNewMessage(message.toString());
+				}
 			}
 
 			@Override
@@ -112,17 +119,28 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 		});
 	}
 
-	public Collection<DataSnapshot> makeCollection(Iterable<DataSnapshot> iter) {
+	private void setupReferences() {
+		this.database = FirebaseDatabase.getInstance();
+		this.usersReference = this.database.getReference(REFERENCE_USERS);
+		this.messagesReference = this.database.getReference(REFERENCE_MESSAGES);
+		if (this.myToken != null && !this.myToken.equals("")) {
+			this.myMessagesReference = this.messagesReference.child(myToken);
+			DatabaseReference userToken = this.usersReference.child(myToken);
+			userToken.child(KEY_TOKEN).setValue(myToken);
+		}
+	}
+
+	private Collection<DataSnapshot> makeCollection(Iterable<DataSnapshot> iter) {
 		Collection<DataSnapshot> list = new ArrayList<>();
 		for (DataSnapshot item : iter) {
-			if (!item.getKey().equals(this.refreshedToken)) {
+			if (!item.getKey().equals(this.myToken)) {
 				list.add(item);
 			}
 		}
 		return list;
 	}
 
-	public static <T> T random(Collection<T> coll) {
+	private static <T> T random(Collection<T> coll) {
 		int num = (int) (Math.random() * coll.size());
 		for (T t : coll) if (--num < 0) return t;
 		throw new AssertionError();
