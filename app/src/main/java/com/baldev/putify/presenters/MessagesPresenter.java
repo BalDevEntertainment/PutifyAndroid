@@ -22,7 +22,7 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 
 	@Override
 	public void sendMessage(final Context context, Editable editable) {
-		if (editable != null) {
+		if (isMessageValid(editable)) {
 			final String messageText = editable.toString();
 			this.messagesManager.getRandomToken(new MessagesManager.TokenCallback() {
 				@Override
@@ -35,7 +35,6 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 					Log.e("Error", "Error");
 				}
 			});
-
 		}
 	}
 
@@ -50,5 +49,9 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 			Message newMessage = new Message(message);
 			this.adapter.addMessage(newMessage);
 		}
+	}
+
+	private boolean isMessageValid(Editable editable) {
+		return editable != null && !editable.toString().equals("");
 	}
 }

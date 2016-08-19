@@ -7,12 +7,16 @@ import com.baldev.putify.adapters.MessagesAdapter;
 
 public interface MessagesMVP { //SUPER AWESOME CONVENTION FOR NAMING MVPs, MIND = BLOWN.
 
-	interface Model{
+	interface Model {
 
 	}
 
-	interface View{
+	interface View {
 		void onSendPressed();
+
+		void onTextChanged(CharSequence text);
+
+		void setSendButtonEnabled(boolean enabled);
 	}
 
 	interface Presenter {
