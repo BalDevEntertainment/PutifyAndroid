@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity implements View, TokenCall
 
 	private void goToMessagesActivity() {
 		Intent messagesIntent = new Intent(this, MessagesActivity.class);
-		messagesIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(messagesIntent);
+		finish();
 	}
 }

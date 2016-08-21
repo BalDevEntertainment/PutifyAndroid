@@ -2,18 +2,20 @@ package com.baldev.putify.helpers;
 
 //Facade for messages
 
+import com.baldev.putify.model.Message;
+
 public interface MessagesManager {
 
 	void askForToken(TokenCallback callback);
 
-	void sendMessage(String to, String message);
+	void sendMessage(Message message);
 
 	void getRandomToken(TokenCallback callback);
 
 	boolean hasTokenBeenRetrieved();
 
 	interface NewMessageListener {
-		void onNewMessage(String message);
+		void onNewMessage(Message message);
 	}
 
 	interface TokenCallback {

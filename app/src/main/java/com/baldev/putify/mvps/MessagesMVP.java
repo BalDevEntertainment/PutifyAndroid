@@ -8,7 +8,11 @@ import com.baldev.putify.adapters.MessagesAdapter;
 public interface MessagesMVP { //SUPER AWESOME CONVENTION FOR NAMING MVPs, MIND = BLOWN.
 
 	interface Model {
+		String getDestinatary();
 
+		String getText();
+
+		long getTimestamp();
 	}
 
 	interface View {

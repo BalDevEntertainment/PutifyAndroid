@@ -1,7 +1,9 @@
 package com.baldev.putify.helpers;
 
 
-public interface FirebaseHelper {
+import com.baldev.putify.model.Message;
+
+public interface FirebaseDatabaseHelper {
 	void registerFCMToken();
 
 	void notifyTokenRegistration();
@@ -10,7 +12,7 @@ public interface FirebaseHelper {
 
 	void getRandomToken(FirebaseTokenCallback callback);
 
-	void sendMessage(String to, String message);
+	void saveMessage(Message message);
 
 	void registerListenerForMessages(FirebaseMessageListener listener);
 
@@ -19,11 +21,11 @@ public interface FirebaseHelper {
 	interface FirebaseTokenCallback {
 		void onTokenRetrieved(String string);
 
-		void onError();
+		void onError(String errorMsg);
 	}
 
 	interface FirebaseMessageListener {
-		void onNewMessage(String message);
+		void onNewMessage(String to, String messageBody, long messageTimestamp);
 	}
 
 }

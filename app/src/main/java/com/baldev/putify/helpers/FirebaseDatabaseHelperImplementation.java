@@ -1,6 +1,6 @@
 package com.baldev.putify.helpers;
 
-import com.baldev.putify.helpers.MessagesManager.TokenCallback;
+import com.baldev.putify.model.Message;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -12,15 +12,13 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class FirebaseHelperImplementation implements FirebaseHelper {
+public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHelper {
 
-	public static final String FCM_TOKEN = "FCMTOKEN";
-	public static final String MISSING = "Missing";
 	private static final String REFERENCE_USERS = "users";
 	private static final String REFERENCE_MESSAGES = "messages";
 	private static final String KEY_TOKEN = "firebaseToken";
 	private static final String KEY_MESSAGE = "message";
-	private static FirebaseHelperImplementation ourInstance = new FirebaseHelperImplementation();
+	private static FirebaseDatabaseHelperImplementation ourInstance = new FirebaseDatabaseHelperImplementation();
 	private FirebaseDatabase database;
 	private DatabaseReference usersReference;
 	private DatabaseReference messagesReference;
@@ -28,11 +26,11 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 	private String myToken;
 	private FirebaseTokenCallback tokenCallback;
 
-	public static FirebaseHelper getInstance() {
+	public static FirebaseDatabaseHelper getInstance() {
 		return ourInstance;
 	}
 
-	private FirebaseHelperImplementation() {
+	private FirebaseDatabaseHelperImplementation() {
 		this.myToken = FirebaseInstanceId.getInstance().getToken();
 	}
 
@@ -66,23 +64,28 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Collection<DataSnapshot> collection = makeCollection(dataSnapshot.getChildren());
-				DataSnapshot randomElement = random(collection);
-				String token = randomElement.getKey();
-				callback.onTokenRetrieved(token);
+				try {
+					DataSnapshot randomElement = random(collection);
+					String token = randomElement.getKey();
+					callback.onTokenRetrieved(token);
+				} catch (AssertionError error) {
+					callback.onError("There's only one Putify user");
+				}
 			}
 
 			@Override
 			public void onCancelled(DatabaseError databaseError) {
-				callback.onError();
+				callback.onError(databaseError.getMessage());
 			}
 		});
 	}
 
 	@Override
-	public void sendMessage(String to, String message) {
-		DatabaseReference receiverMessagesReference = messagesReference.child(to);
-		DatabaseReference newMessage = receiverMessagesReference.push();
-		newMessage.child(KEY_MESSAGE).setValue(message);
+	public void saveMessage(Message message) {
+		DatabaseReference receiverMessagesReference = messagesReference.child(message.getDestinatary());
+		DatabaseReference newMessage = receiverMessagesReference.push().child(KEY_MESSAGE);
+		newMessage.setValue(message);
+
 	}
 
 
@@ -91,9 +94,13 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 		this.myMessagesReference.addChildEventListener(new ChildEventListener() {
 			@Override
 			public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-				Object message = dataSnapshot.child("message").getValue();
-				if (message != null) {
-					listener.onNewMessage(message.toString());
+				Object messageBody = dataSnapshot.child(KEY_MESSAGE).child(Message.KEY_BODY).getValue();
+				Object messageTimestamp = dataSnapshot.child(KEY_MESSAGE).child(Message.KEY_TIMESTAMP).getValue();
+				if (messageBody != null && messageTimestamp != null) {
+					String to = myMessagesReference.getKey();
+					String body = messageBody.toString();
+					long timestamp = Long.valueOf(messageTimestamp.toString());
+					listener.onNewMessage(to, body, timestamp);
 				}
 			}
 
@@ -120,7 +127,10 @@ public class FirebaseHelperImplementation implements FirebaseHelper {
 	}
 
 	private void setupReferences() {
-		this.database = FirebaseDatabase.getInstance();
+		if (this.database == null) {
+			this.database = FirebaseDatabase.getInstance();
+			this.database.setPersistenceEnabled(true);
+		}
 		this.usersReference = this.database.getReference(REFERENCE_USERS);
 		this.messagesReference = this.database.getReference(REFERENCE_MESSAGES);
 		if (this.myToken != null && !this.myToken.equals("")) {

@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
+              xmlns:tool="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginBottom="12dp">
@@ -11,17 +12,33 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         card_view:cardBackgroundColor="@color/colorPrimary"
+        card_view:cardCornerRadius="4dp"
         card_view:cardElevation="4dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardUseCompatPadding="true">
 
-        <TextView
-            android:id="@+id/text_view_message_body"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:text="test"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="16dp"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                tool:text="19:22"/>
+
+            <TextView
+                android:id="@+id/text_view_message_body"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                tool:text="Message "/>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

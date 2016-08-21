@@ -21,13 +21,14 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 	}
 
 	@Override
-	public void sendMessage(final Context context, Editable editable) {
+	public void sendMessage(final Context context, final Editable editable) {
 		if (isMessageValid(editable)) {
 			final String messageText = editable.toString();
 			this.messagesManager.getRandomToken(new MessagesManager.TokenCallback() {
 				@Override
 				public void onTokenRetrieved(String token) {
-					messagesManager.sendMessage(token, messageText);
+					Message newMessage = new Message(token, messageText);
+					messagesManager.sendMessage(newMessage);
 				}
 
 				@Override
@@ -44,10 +45,9 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 	}
 
 	@Override
-	public void onNewMessage(String message) {
+	public void onNewMessage(Message message) {
 		if (this.adapter != null) { //TODO remove on Nullable patter implementation
-			Message newMessage = new Message(message);
-			this.adapter.addMessage(newMessage);
+			this.adapter.addMessage(message);
 		}
 	}
 
