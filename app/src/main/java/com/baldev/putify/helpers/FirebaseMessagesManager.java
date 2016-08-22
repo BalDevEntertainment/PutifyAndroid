@@ -50,7 +50,7 @@ public class FirebaseMessagesManager implements MessagesManager {
 		Message copyForMyself = new Message(myToken, message.getText(), message.getTimestamp());
 		this.firebaseDatabaseHelper.saveMessage(copyForMyself);
 		this.firebaseDatabaseHelper.saveMessage(message);
-		this.pushNotificationsManager.sendPushNotification(context, message.getDestinatary(), "You have been Putified!", message.getText());
+		this.pushNotificationsManager.sendPushNotification(context, message.getDestinatary(), message.getText());
 	}
 
 	@Override
