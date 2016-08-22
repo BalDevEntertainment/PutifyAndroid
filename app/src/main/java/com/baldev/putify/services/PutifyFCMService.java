@@ -33,9 +33,10 @@ public class PutifyFCMService extends FirebaseMessagingService implements NewMes
 			builder.setContentTitle(this.getString(R.string.notification_new_message_title));
 			builder.setContentText(notificationData.get(KEY_BODY));
 			builder.setSmallIcon(R.drawable.logo_putify);
+			builder.setAutoCancel(true);
 			builder.setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_LIGHTS);
 			Intent resultIntent = new Intent(this, MessagesActivity.class);
-			resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			builder.setContentIntent(resultPendingIntent);
 			NotificationManager mNotifyMgr = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
