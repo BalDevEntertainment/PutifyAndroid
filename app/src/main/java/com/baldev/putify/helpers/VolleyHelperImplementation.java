@@ -12,6 +12,7 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.baldev.putify.helpers.MessagesManager.MessageDeliveryCallback;
 import com.baldev.putify.services.PutifyFCMService;
 
 import org.json.JSONException;
@@ -31,8 +32,7 @@ public class VolleyHelperImplementation implements PushNotificationsManager {
 		return instance;
 	}
 
-	@Override
-	public void sendPushNotification(Context context, String to, String body) {
+	public void sendPushNotification(Context context, String to, String body, final PushNotificationCallback callback) {
 		// Instantiate the RequestQueue.
 		RequestQueue queue = Volley.newRequestQueue(context);
 		String url = URL_FCM;
@@ -46,6 +46,18 @@ public class VolleyHelperImplementation implements PushNotificationsManager {
 					@Override
 					public void onResponse(JSONObject response) {
 						Log.d("Volley", "Response is: " + response.toString());
+						if (callback != null) {
+							if (response.has("failure")) {
+								try {
+									boolean failed = response.getInt("failure") != 0;
+									if (failed) {
+										callback.onInvalidRecipient();
+									}
+								} catch (JSONException e) {
+									e.printStackTrace();
+								}
+							}
+						}
 					}
 				}, new Response.ErrorListener() {
 			@Override

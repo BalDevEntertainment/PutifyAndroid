@@ -7,6 +7,7 @@ import android.util.Log;
 import com.baldev.putify.adapters.MessagesAdapter;
 import com.baldev.putify.helpers.FirebaseMessagesManager;
 import com.baldev.putify.helpers.MessagesManager;
+import com.baldev.putify.helpers.MessagesManager.MessageDeliveryCallback;
 import com.baldev.putify.helpers.MessagesManager.NewMessageListener;
 import com.baldev.putify.model.Message;
 import com.baldev.putify.mvps.MessagesMVP;
@@ -26,7 +27,7 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 			final String messageText = editable.toString();
 			this.messagesManager.getRandomToken(new MessagesManager.TokenCallback() {
 				@Override
-				public void onTokenRetrieved(String token) {
+				public void onTokenRetrieved(final String token) {
 					Message newMessage = new Message(token, messageText);
 					messagesManager.sendMessage(newMessage);
 				}
@@ -52,6 +53,6 @@ public class MessagesPresenter implements MessagesMVP.Presenter, NewMessageListe
 	}
 
 	private boolean isMessageValid(Editable editable) {
-		return editable != null && !editable.toString().equals("");
+		return editable != null && !editable.toString().trim().equals("");
 	}
 }

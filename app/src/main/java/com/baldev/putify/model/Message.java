@@ -37,7 +37,7 @@ public class Message implements MessagesMVP.Model {
 
 	@Exclude
 	@Override
-	public String getDestinatary() {
+	public String getRecipient() {
 		return this.to;
 	}
 

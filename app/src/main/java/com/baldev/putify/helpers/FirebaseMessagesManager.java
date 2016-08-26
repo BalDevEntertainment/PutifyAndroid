@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.baldev.putify.helpers.FirebaseDatabaseHelper.FirebaseMessageListener;
 import com.baldev.putify.helpers.FirebaseDatabaseHelper.FirebaseTokenCallback;
+import com.baldev.putify.helpers.PushNotificationsManager.PushNotificationCallback;
 import com.baldev.putify.model.Message;
 
 public class FirebaseMessagesManager implements MessagesManager {
@@ -45,12 +46,31 @@ public class FirebaseMessagesManager implements MessagesManager {
 	}
 
 	@Override
-	public void sendMessage(Message message) {
+	public void sendMessage(final Message message) {
+		sendMessageCopyForMyself(message);
+		sendMessageToOther(message, new MessageDeliveryCallback() {
+			@Override
+			public void onInvalidRecipient() {
+				invalidateToken(message.getRecipient());
+				// TODO: 25/08/2016 add resend logic
+			}
+		});
+	}
+
+	private void sendMessageCopyForMyself(Message message) {
 		String myToken = this.firebaseDatabaseHelper.getMyToken();
 		Message copyForMyself = new Message(myToken, message.getText(), message.getTimestamp());
 		this.firebaseDatabaseHelper.saveMessage(copyForMyself);
+	}
+
+	private void sendMessageToOther(Message message, final MessageDeliveryCallback callback) {
 		this.firebaseDatabaseHelper.saveMessage(message);
-		this.pushNotificationsManager.sendPushNotification(context, message.getDestinatary(), message.getText());
+		this.pushNotificationsManager.sendPushNotification(context, message.getRecipient(), message.getText(), new PushNotificationCallback() {
+			@Override
+			public void onInvalidRecipient() {
+				callback.onInvalidRecipient();
+			}
+		});
 	}
 
 	@Override
@@ -72,6 +92,11 @@ public class FirebaseMessagesManager implements MessagesManager {
 	public boolean hasTokenBeenRetrieved() {
 		String myToken = this.firebaseDatabaseHelper.getMyToken();
 		return myToken != null && !myToken.equals("");
+	}
+
+	@Override
+	public void invalidateToken(String token) {
+		this.firebaseDatabaseHelper.invalidateToken(token);
 	}
 
 	public static void registerToken() {

@@ -54,7 +54,7 @@ public class MessagesActivity extends AppCompatActivity implements MessagesMVP.V
 	@Override
 	@OnTextChanged(value = R.id.edit_text_message)
 	public void onTextChanged(CharSequence text) {
-		this.setSendButtonEnabled(!text.toString().equals(""));
+		this.setSendButtonEnabled(!text.toString().trim().equals(""));
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.baldev.putify.helpers;
 
+import com.baldev.putify.BuildConfig;
 import com.baldev.putify.model.Message;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -13,13 +14,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHelper {
-
-	private static final String REFERENCE_USERS = "users";
-	private static final String REFERENCE_MESSAGES = "messages";
+	private static final String KEY_DATABASE = BuildConfig.DATABASE;
+	private static final String KEY_USERS = "users";
+	private static final String KEY_MESSAGES = "messages";
 	private static final String KEY_TOKEN = "firebaseToken";
 	private static final String KEY_MESSAGE = "message";
 	private static FirebaseDatabaseHelperImplementation ourInstance = new FirebaseDatabaseHelperImplementation();
-	private FirebaseDatabase database;
+	private FirebaseDatabase firebaseDatabase;
+	private DatabaseReference database;
 	private DatabaseReference usersReference;
 	private DatabaseReference messagesReference;
 	private DatabaseReference myMessagesReference; //TODO see how to avoid null
@@ -60,7 +62,7 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 
 	@Override
 	public void getRandomToken(final FirebaseTokenCallback callback) {
-		this.usersReference.addValueEventListener(new ValueEventListener() {
+		this.usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot) {
 				Collection<DataSnapshot> collection = makeCollection(dataSnapshot.getChildren());
@@ -82,12 +84,11 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 
 	@Override
 	public void saveMessage(Message message) {
-		DatabaseReference receiverMessagesReference = messagesReference.child(message.getDestinatary());
+		DatabaseReference receiverMessagesReference = messagesReference.child(message.getRecipient());
 		DatabaseReference newMessage = receiverMessagesReference.push().child(KEY_MESSAGE);
 		newMessage.setValue(message);
 
 	}
-
 
 	@Override
 	public void registerListenerForMessages(final FirebaseMessageListener listener) {
@@ -126,13 +127,22 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 		});
 	}
 
-	private void setupReferences() {
-		if (this.database == null) {
-			this.database = FirebaseDatabase.getInstance();
-			this.database.setPersistenceEnabled(true);
+	@Override
+	public void invalidateToken(String token) {
+		DatabaseReference userReference = this.usersReference.child(token);
+		if (userReference != null) {
+			userReference.removeValue();
 		}
-		this.usersReference = this.database.getReference(REFERENCE_USERS);
-		this.messagesReference = this.database.getReference(REFERENCE_MESSAGES);
+	}
+
+	private void setupReferences() {
+		if (this.firebaseDatabase == null) {
+			this.firebaseDatabase = FirebaseDatabase.getInstance();
+			this.firebaseDatabase.setPersistenceEnabled(true);
+		}
+		this.database = this.firebaseDatabase.getReference(KEY_DATABASE);
+		this.usersReference = this.database.child(KEY_USERS);
+		this.messagesReference = this.database.child(KEY_MESSAGES);
 		if (this.myToken != null && !this.myToken.equals("")) {
 			this.myMessagesReference = this.messagesReference.child(myToken);
 			DatabaseReference userToken = this.usersReference.child(myToken);

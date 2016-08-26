@@ -18,6 +18,8 @@ public interface FirebaseDatabaseHelper {
 
 	void askForToken(FirebaseTokenCallback callback);
 
+	void invalidateToken(String token);
+
 	interface FirebaseTokenCallback {
 		void onTokenRetrieved(String string);
 

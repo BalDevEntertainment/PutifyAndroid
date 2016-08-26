@@ -14,6 +14,8 @@ public interface MessagesManager {
 
 	boolean hasTokenBeenRetrieved();
 
+	void invalidateToken(String token);
+
 	interface NewMessageListener {
 		void onNewMessage(Message message);
 	}
@@ -22,5 +24,9 @@ public interface MessagesManager {
 		void onTokenRetrieved(String string);
 
 		void onError();
+	}
+
+	interface MessageDeliveryCallback {
+		void onInvalidRecipient();
 	}
 }
