@@ -1,24 +1,18 @@
 package com.baldev.putify.views;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ItemAnimator;
-import android.support.v7.widget.RecyclerView.ViewHolder;
-import android.text.Editable;
-import android.widget.EditText;
 import android.widget.ImageButton;
 
-import com.baldev.putify.mvps.MessagesMVP;
 import com.baldev.putify.R;
+import com.baldev.putify.adapters.MessagesAdapter;
+import com.baldev.putify.mvps.MessagesMVP;
 import com.baldev.putify.mvps.MessagesMVP.Presenter;
 import com.baldev.putify.presenters.MessagesPresenter;
-import com.baldev.putify.adapters.MessagesAdapter;
+import com.baldev.putify.views.widgets.ShowcaseEditText;
+import com.github.amlcurran.showcaseview.ShowcaseView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +21,7 @@ import butterknife.OnTextChanged;
 
 public class MessagesActivity extends AppCompatActivity implements MessagesMVP.View {
 
-	@BindView(R.id.edit_text_message) EditText messageEditText;
+	@BindView(R.id.edit_text_message) ShowcaseEditText messageEditText;
 	@BindView(R.id.recycler_view_messages) RecyclerView messagesRecyclerView;
 	@BindView(R.id.button_send_message) ImageButton sendButton;
 
@@ -49,6 +43,13 @@ public class MessagesActivity extends AppCompatActivity implements MessagesMVP.V
 		this.presenter.setAdapter(this.adapter);
 
 		this.clearMessageField();
+
+		new ShowcaseView.Builder(this)
+				.setTarget(messageEditText)
+				.setContentTitle("Putifica a alguien!")
+				.setContentText("Descarga tu odio con un extraño acá")
+				.hideOnTouchOutside()
+				.build();
 	}
 
 	@Override
@@ -73,4 +74,6 @@ public class MessagesActivity extends AppCompatActivity implements MessagesMVP.V
 	private void clearMessageField() {
 		this.messageEditText.setText("");
 	}
+
+
 }

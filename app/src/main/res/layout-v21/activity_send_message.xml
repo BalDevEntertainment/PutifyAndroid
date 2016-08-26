@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <EditText
+        <com.baldev.putify.views.widgets.ShowcaseEditText
             android:id="@+id/edit_text_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
