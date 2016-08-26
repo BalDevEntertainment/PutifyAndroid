@@ -1,17 +1,11 @@
 package com.baldev.putify.services;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 
 import com.baldev.putify.R;
-import com.baldev.putify.helpers.FirebaseMessagesManager;
-import com.baldev.putify.helpers.MessagesManager;
 import com.baldev.putify.helpers.MessagesManager.NewMessageListener;
 import com.baldev.putify.model.Message;
 import com.baldev.putify.views.MessagesActivity;

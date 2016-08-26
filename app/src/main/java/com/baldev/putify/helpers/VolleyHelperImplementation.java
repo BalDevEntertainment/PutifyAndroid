@@ -12,7 +12,6 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.baldev.putify.helpers.MessagesManager.MessageDeliveryCallback;
 import com.baldev.putify.services.PutifyFCMService;
 
 import org.json.JSONException;

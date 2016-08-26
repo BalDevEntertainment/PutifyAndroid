@@ -7,7 +7,6 @@ import android.util.Log;
 import com.baldev.putify.adapters.MessagesAdapter;
 import com.baldev.putify.helpers.FirebaseMessagesManager;
 import com.baldev.putify.helpers.MessagesManager;
-import com.baldev.putify.helpers.MessagesManager.MessageDeliveryCallback;
 import com.baldev.putify.helpers.MessagesManager.NewMessageListener;
 import com.baldev.putify.model.Message;
 import com.baldev.putify.mvps.MessagesMVP;
