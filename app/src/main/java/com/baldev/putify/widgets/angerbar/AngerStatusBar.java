@@ -24,7 +24,7 @@ public class AngerStatusBar extends LinearLayout implements View, Widget {
 	@BindView(R.id.text_view_anger_points) TextView angerPoints;
 
 	@Inject
-	private Presenter presenter;
+	Presenter presenter;
 
 	public AngerStatusBar(Context context) {
 		super(context);
@@ -44,8 +44,18 @@ public class AngerStatusBar extends LinearLayout implements View, Widget {
 	private void init() {
 		inflate(getContext(), R.layout.widget_anger_bar, this);
 		ButterKnife.bind(this);
+		this.setupComponent();
 		this.angerBar.setMax(ANGER_BAR_MAX_VALUE);
-		this.presenter.onViewCreated();
+		if(!this.isInEditMode()){
+			this.presenter.onViewCreated();
+		}
+	}
+
+	private void setupComponent() {
+		DaggerAngerStatusBarComponent.builder()
+				.angerStatusBarModule(new AngerStatusBarModule(this))
+				.build()
+				.inject(this);
 	}
 
 	@Override
