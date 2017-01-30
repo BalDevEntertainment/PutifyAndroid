@@ -3,4 +3,9 @@
     <string name="loggin_in">Loggin in</string>
     <string name="notification_new_message_title">You have been Putified!</string>
     <string name="send_message_hint">Putify here...</string>
+
+
+    <!-- Anger Bar -->
+    <string name="anger">Anger</string>
+    <string name="points">Points</string>
 </resources>
