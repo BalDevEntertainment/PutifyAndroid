@@ -1,4 +1,4 @@
-package com.baldev.putify.views;
+package com.baldev.putify.splash;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,34 +9,35 @@ import com.baldev.putify.R;
 import com.baldev.putify.helpers.FirebaseMessagesManager;
 import com.baldev.putify.helpers.MessagesManager;
 import com.baldev.putify.helpers.MessagesManager.TokenCallback;
-import com.baldev.putify.mvps.SplashMVP.View;
+import com.baldev.putify.splash.SplashMVP.Presenter;
+import com.baldev.putify.splash.SplashMVP.View;
+import com.baldev.putify.views.MessagesActivity;
 
-public class SplashActivity extends AppCompatActivity implements View, TokenCallback {
+import javax.inject.Inject;
+
+public class SplashActivity extends AppCompatActivity implements View {
+
+	@Inject
+	Presenter presenter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_splash);
+		this.setupComponent();
 
-		MessagesManager messagesManager = new FirebaseMessagesManager(this);
-		if (!messagesManager.hasTokenBeenRetrieved()) {
-			messagesManager.askForToken(this);
-		} else {
-			goToMessagesActivity();
-		}
+		this.presenter.checkFirebaseToken();
+	}
+
+	private void setupComponent() {
+		DaggerSplashComponent.builder()
+				.splashModule(new SplashModule(this))
+				.build()
+				.inject(this);
 	}
 
 	@Override
-	public void onTokenRetrieved(String string) {
-		goToMessagesActivity();
-	}
-
-	@Override
-	public void onError() {
-		Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
-	}
-
-	private void goToMessagesActivity() {
+	public void goToMessagesActivity() {
 		Intent messagesIntent = new Intent(this, MessagesActivity.class);
 		startActivity(messagesIntent);
 		finish();
