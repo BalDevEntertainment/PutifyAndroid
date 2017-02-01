@@ -2,10 +2,15 @@ package com.baldev.putify.splash;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.baldev.putify.BaseActivity;
 import com.baldev.putify.R;
+import com.baldev.putify.data.LocalRepository;
+import com.baldev.putify.data.LocalRepositoryModule;
+import com.baldev.putify.data.UserPreferenceManager;
 import com.baldev.putify.helpers.FirebaseMessagesManager;
 import com.baldev.putify.helpers.MessagesManager;
 import com.baldev.putify.helpers.MessagesManager.TokenCallback;
@@ -15,10 +20,11 @@ import com.baldev.putify.views.MessagesActivity;
 
 import javax.inject.Inject;
 
-public class SplashActivity extends AppCompatActivity implements View {
+import static com.google.common.base.Preconditions.checkNotNull;
 
-	@Inject
-	Presenter presenter;
+public class SplashActivity extends BaseActivity implements View {
+
+	@Inject SplashPresenter presenter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +35,14 @@ public class SplashActivity extends AppCompatActivity implements View {
 		this.presenter.checkFirebaseToken();
 	}
 
+	@Override
+	public void setPresenter(Presenter splashPresenter) {
+		presenter = checkNotNull((SplashPresenter) splashPresenter);
+	}
+
 	private void setupComponent() {
 		DaggerSplashComponent.builder()
+				.appComponent(getApplicationComponent())
 				.splashModule(new SplashModule(this))
 				.build()
 				.inject(this);

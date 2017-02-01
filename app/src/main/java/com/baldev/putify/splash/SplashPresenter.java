@@ -1,28 +1,40 @@
 package com.baldev.putify.splash;
 
-import com.baldev.putify.splash.SplashMVP.Model;
+import com.baldev.putify.data.LocalRepository;
+import com.baldev.putify.helpers.MessagesManager;
 import com.baldev.putify.splash.SplashMVP.View;
+
+import javax.inject.Inject;
 
 public class SplashPresenter implements SplashMVP.Presenter {
 
 	protected View view;
+	protected LocalRepository localRepository;
 
-	protected Model model;
-
-	public SplashPresenter(View view, Model model) {
+	@Inject
+	SplashPresenter(View view, LocalRepository localRepository) {
 		this.view = view;
-		this.model = model;
+		this.localRepository = localRepository;
+	}
+
+	@Inject
+	void setupPresenter() {
+		this.view.setPresenter(this);
 	}
 
 	@Override
 	public void checkFirebaseToken() {
-		this.model.checkFirebaseToken(this);
+		/*
+		if (!this.messagesManager.hasTokenBeenRetrieved()) {
+			this.messagesManager.askForToken(this);
+		}
+		*/
 	}
 
 	@Override
 	public void onTokenRetrieved(String string) {
-		checkIfUserExists();
-		view.goToMessagesActivity();
+		this.checkIfUserExists();
+		this.view.goToMessagesActivity();
 	}
 
 	private void checkIfUserExists() {

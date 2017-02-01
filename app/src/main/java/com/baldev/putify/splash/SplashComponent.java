@@ -1,13 +1,14 @@
 package com.baldev.putify.splash;
 
-import javax.inject.Singleton;
+import com.baldev.putify.AppComponent;
+import com.baldev.putify.scopes.ActivityScoped;
 
 import dagger.Component;
 
-@Singleton
-@Component(
-		modules = {SplashModule.class}
-)
+@ActivityScoped
+@Component(	dependencies = AppComponent.class,
+			modules = {SplashModule.class} )
+
 @SuppressWarnings("package")
 public interface SplashComponent {
 	void inject(SplashActivity activity);

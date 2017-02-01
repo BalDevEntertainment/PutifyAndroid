@@ -4,13 +4,10 @@ import com.baldev.putify.helpers.MessagesManager.TokenCallback;
 
 public interface SplashMVP {
 
-	interface Model {
-
-		void checkFirebaseToken(TokenCallback callback);
-	}
-
 	interface View {
 		void goToMessagesActivity();
+
+		void setPresenter(Presenter splashPresenter);
 	}
 
 	interface Presenter extends TokenCallback {
