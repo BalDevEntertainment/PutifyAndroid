@@ -3,4 +3,5 @@
     <string name="loggin_in">Loggin in</string>
     <string name="notification_new_message_title">You have been Putified!</string>
     <string name="send_message_hint">Putify here...</string>
+    <string name="preference_key_user_name">com.baldev.putify.USER_NAME</string>
 </resources>

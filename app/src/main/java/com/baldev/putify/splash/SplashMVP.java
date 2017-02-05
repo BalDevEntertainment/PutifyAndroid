@@ -8,10 +8,11 @@ public interface SplashMVP {
 		void goToMessagesActivity();
 
 		void setPresenter(Presenter splashPresenter);
+
+		void showToast(String text);
 	}
 
 	interface Presenter extends TokenCallback {
-		void checkFirebaseToken();
 	}
 
 }

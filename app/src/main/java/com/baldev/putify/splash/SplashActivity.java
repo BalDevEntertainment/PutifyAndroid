@@ -31,13 +31,16 @@ public class SplashActivity extends BaseActivity implements View {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_splash);
 		this.setupComponent();
-
-		this.presenter.checkFirebaseToken();
 	}
 
 	@Override
 	public void setPresenter(Presenter splashPresenter) {
 		presenter = checkNotNull((SplashPresenter) splashPresenter);
+	}
+
+	@Override
+	public void showToast(String text) {
+		Toast.makeText(this, text != null && !text.isEmpty() ? text : "Empty", Toast.LENGTH_SHORT).show();
 	}
 
 	private void setupComponent() {
