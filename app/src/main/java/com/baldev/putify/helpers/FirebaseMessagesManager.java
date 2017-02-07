@@ -99,10 +99,4 @@ public class FirebaseMessagesManager implements MessagesManager {
 		this.firebaseDatabaseHelper.invalidateToken(token);
 	}
 
-	public static void registerToken() {
-		FirebaseDatabaseHelper firebaseDatabaseHelper = FirebaseDatabaseHelperImplementation.getInstance();
-		firebaseDatabaseHelper.registerFCMToken();
-		firebaseDatabaseHelper.notifyTokenRegistration();
-	}
-
 }

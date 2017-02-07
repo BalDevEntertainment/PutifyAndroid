@@ -21,17 +21,17 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 	private static final String KEY_TOKEN = "firebaseToken";
 	private static final String KEY_USERNAME = "username";
 	private static final String KEY_MESSAGE = "message";
-	private static FirebaseDatabaseHelperImplementation ourInstance = new FirebaseDatabaseHelperImplementation();
+	private static final FirebaseDatabaseHelperImplementation instance = new FirebaseDatabaseHelperImplementation();
 	private FirebaseDatabase firebaseDatabase;
 	private DatabaseReference database;
 	private DatabaseReference usersReference;
 	private DatabaseReference messagesReference;
-	private DatabaseReference myMessagesReference; //TODO see how to avoid null
+	private DatabaseReference myMessagesReference;
 	private String myToken;
 	private FirebaseTokenCallback tokenCallback;
 
 	public static FirebaseDatabaseHelper getInstance() {
-		return ourInstance;
+		return instance;
 	}
 
 	private FirebaseDatabaseHelperImplementation() {
@@ -42,7 +42,11 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 	@Override
 	public void registerFCMToken() {
 		this.myToken = FirebaseInstanceId.getInstance().getToken();
-		//this.setupReferences();
+	}
+
+	@Override
+	public void initialize(FirebaseMessageInitializationListener listener) {
+
 	}
 
 	@Override

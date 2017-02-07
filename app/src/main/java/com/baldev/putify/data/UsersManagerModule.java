@@ -1,5 +1,7 @@
 package com.baldev.putify.data;
 
+import com.baldev.putify.scopes.ApplicationScoped;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -8,15 +10,15 @@ import dagger.Provides;
 @Module
 public class UsersManagerModule {
 
-	private final UsersManager usersManager;
+	private final RemoteRepository remoteRepository;
 
-	public UsersManagerModule(UsersManager usersManager) {
-		this.usersManager = usersManager;
+	public UsersManagerModule(RemoteRepository remoteRepository) {
+		this.remoteRepository = remoteRepository;
 	}
 
 	@Provides
-	@Singleton
+	@ApplicationScoped
 	public UsersManager provideUsersManager() {
-		return usersManager;
+		return new FirebaseUsersManager(remoteRepository);
 	}
 }

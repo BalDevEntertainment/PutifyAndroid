@@ -17,20 +17,22 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="250dp"
-        android:layout_centerInParent="true"
-        android:layout_margin="48dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="48dp"
+        android:layout_marginRight="48dp"
         android:contentDescription="@null"
         android:src="@drawable/logo_putify"
         android:transitionName="logo"/>
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/logo"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:text="@string/loading"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="32dp"
+        android:hint="@string/select_a_username"
         android:textColor="@android:color/white"
+        android:textColorHint="@android:color/darker_gray"
         android:textSize="24sp"
         android:textStyle="bold"/>
 </RelativeLayout>

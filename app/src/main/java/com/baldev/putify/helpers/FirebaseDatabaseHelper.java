@@ -1,11 +1,9 @@
 package com.baldev.putify.helpers;
 
 
+import com.baldev.putify.data.FirebaseUsersManager;
 import com.baldev.putify.model.Message;
 import com.baldev.putify.model.User;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.EventListener;
 
 public interface FirebaseDatabaseHelper {
 	void registerFCMToken();
@@ -28,6 +26,8 @@ public interface FirebaseDatabaseHelper {
 
 	void getMyself(UserCallback callback);
 
+	void initialize(FirebaseMessageInitializationListener listener);
+
 	interface FirebaseTokenCallback {
 		void onTokenRetrieved(String string);
 
@@ -41,6 +41,10 @@ public interface FirebaseDatabaseHelper {
 	interface FirebaseMessageListener {
 		void onNewMessage(String to, String messageBody, long messageTimestamp);
 
+	}
+
+	interface FirebaseMessageInitializationListener{
+		void onInitializationCompleted();
 	}
 
 }

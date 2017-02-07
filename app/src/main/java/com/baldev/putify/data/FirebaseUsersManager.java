@@ -1,40 +1,44 @@
 package com.baldev.putify.data;
 
-import com.baldev.putify.helpers.FirebaseDatabaseHelper;
-import com.baldev.putify.helpers.FirebaseDatabaseHelper.UserCallback;
-import com.baldev.putify.helpers.FirebaseDatabaseHelperImplementation;
+import android.support.annotation.NonNull;
+
 import com.baldev.putify.model.User;
-import com.google.firebase.database.ValueEventListener;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class FirebaseUsersManager implements UsersManager {
-
-	private static final FirebaseDatabaseHelper firebaseDatabaseHelper = FirebaseDatabaseHelperImplementation.getInstance();
-	private static final FirebaseUsersManager instance = new FirebaseUsersManager();
 
 	private static User myself;
 
-	private FirebaseUsersManager() {
-	}
+	private final RemoteRepository remoteRepository;
 
-	public static FirebaseUsersManager getInstance() {
-		return instance;
-	}
-
-	@Override
-	public void initialize(UsersManagerInitializationListener listener){
-		firebaseDatabaseHelper.getMyself(user -> {
-			myself = user;
-			listener.onInitializationCompleted();
-		});
+	@Inject
+	protected FirebaseUsersManager(RemoteRepository remoteRepository) {
+		this.remoteRepository = remoteRepository;
 	}
 
 	@Override
 	public void createNewUser(User user) {
-		FirebaseUsersManager.myself = firebaseDatabaseHelper.createNewUser(user);
+		//FirebaseUsersManager.myself = firebaseDatabaseHelper.createNewUser(user);
 	}
 
 	@Override
+	public void instantiateMyself() {
+		if (myself == null) {
+			myself = remoteRepository.getMyself();
+		} else {
+			throw new IllegalStateException("myself was already instantiated");
+		}
+	}
+
+	@Override
+	@NonNull
 	public User getMyself() {
+		if (myself == null) {
+			throw new IllegalStateException("instantiateMyself() needs to be called before to retrieve 'myself'");
+		}
 		return myself;
 	}
 

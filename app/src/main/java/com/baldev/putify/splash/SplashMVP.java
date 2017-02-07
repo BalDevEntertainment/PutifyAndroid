@@ -9,7 +9,7 @@ public interface SplashMVP {
 
 		void setPresenter(Presenter splashPresenter);
 
-		void showToast(String text);
+		void goToCreateUserActivity();
 	}
 
 	interface Presenter extends TokenCallback {
