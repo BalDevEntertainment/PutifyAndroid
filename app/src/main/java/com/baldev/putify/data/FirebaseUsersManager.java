@@ -25,9 +25,12 @@ public class FirebaseUsersManager implements UsersManager {
 	}
 
 	@Override
-	public void instantiateMyself() {
+	public void instantiateMyself(final UserCallback callback) {
 		if (myself == null) {
-			myself = remoteRepository.getMyself();
+			remoteRepository.getMyself(user -> {
+				myself = user;
+				callback.onUserRetrieved(myself);
+			});
 		} else {
 			throw new IllegalStateException("myself was already instantiated");
 		}
@@ -41,5 +44,6 @@ public class FirebaseUsersManager implements UsersManager {
 		}
 		return myself;
 	}
+
 
 }

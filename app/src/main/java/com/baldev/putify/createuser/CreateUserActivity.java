@@ -18,8 +18,12 @@ public class CreateUserActivity extends BaseActivity implements View {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.activity_create_user);
 		this.setupComponent();
+	}
+
+	@Override
+	protected int getLayoutResource() {
+		return R.layout.activity_create_user;
 	}
 
 	@Override

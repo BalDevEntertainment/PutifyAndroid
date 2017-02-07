@@ -9,5 +9,9 @@ public interface UsersManager {
 
 	User getMyself();
 
-	void instantiateMyself();
+	void instantiateMyself(UserCallback callback);
+
+	interface UserCallback {
+		void onUserRetrieved(User user);
+	}
 }

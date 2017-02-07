@@ -32,8 +32,12 @@ public class SplashActivity extends BaseActivity implements View {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.activity_splash);
 		((PutifyApplication)getApplication()).waitForInitialization(this::setupComponent);
+	}
+
+	@Override
+	protected int getLayoutResource() {
+		return R.layout.activity_splash;
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import com.baldev.putify.data.UsersManagerModule;
 import com.baldev.putify.helpers.FirebaseMessagesManager;
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import io.fabric.sdk.android.Fabric;
@@ -25,8 +26,9 @@ public class PutifyApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Fabric.with(this, new Crashlytics());
-		FirebaseApp.initializeApp(this);
+		initializeFabric();
+		initializeFirebase();
+		initializeFirebaseDatabase();
 
 		appIsReady = !isNullOrEmpty(FirebaseInstanceId.getInstance().getToken());
 
@@ -44,7 +46,7 @@ public class PutifyApplication extends Application {
 	}
 
 	public void waitForInitialization(InitializationListener initializationListener) {
-		if(appIsReady){
+		if (appIsReady) {
 			initializationListener.onInitializationCompleted();
 			this.initializationListener = null;
 		} else {
@@ -54,12 +56,24 @@ public class PutifyApplication extends Application {
 
 	public void onFCMTokenRetrieved() {
 		appIsReady = true;
-		if(this.initializationListener != null){
+		if (this.initializationListener != null) {
 			initializationListener.onInitializationCompleted();
 		}
 	}
 
-	public interface InitializationListener{
+	private void initializeFabric() {
+		Fabric.with(this, new Crashlytics());
+	}
+
+	private void initializeFirebase() {
+		FirebaseApp.initializeApp(this);
+	}
+
+	private void initializeFirebaseDatabase() {
+		FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+	}
+
+	public interface InitializationListener {
 		void onInitializationCompleted();
 	}
 }

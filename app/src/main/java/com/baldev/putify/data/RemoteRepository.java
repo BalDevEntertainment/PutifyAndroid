@@ -1,7 +1,7 @@
 package com.baldev.putify.data;
 
-import com.baldev.putify.model.User;
+import com.baldev.putify.data.UsersManager.UserCallback;
 
 public interface RemoteRepository {
-	User getMyself();
+	void getMyself(UserCallback userCallback);
 }
