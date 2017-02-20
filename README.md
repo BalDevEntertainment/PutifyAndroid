@@ -4,10 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 ### Create user.
+### Strategy for Different API levels.
 ### Design improvements (logo, color palette, general UX/UI).
-
-### Added
-- Add resend logic on invalid token.
 
 ## [0.4.1] - 25-08-2016
 ### Added
