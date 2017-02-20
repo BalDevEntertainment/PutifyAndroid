@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Create user.
+### Design improvements (logo, color palette, general UX/UI).
+
 ### Added
 - Add resend logic on invalid token.
 
