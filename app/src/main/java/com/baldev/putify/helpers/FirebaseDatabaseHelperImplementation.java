@@ -2,6 +2,7 @@ package com.baldev.putify.helpers;
 
 import com.baldev.putify.BuildConfig;
 import com.baldev.putify.model.Message;
+import com.baldev.putify.model.User;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -13,33 +14,40 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Deprecated
 public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHelper {
 	private static final String KEY_DATABASE = BuildConfig.DATABASE;
 	private static final String KEY_USERS = "users";
 	private static final String KEY_MESSAGES = "messages";
 	private static final String KEY_TOKEN = "firebaseToken";
+	private static final String KEY_USERNAME = "username";
 	private static final String KEY_MESSAGE = "message";
-	private static FirebaseDatabaseHelperImplementation ourInstance = new FirebaseDatabaseHelperImplementation();
+	private static final FirebaseDatabaseHelperImplementation instance = new FirebaseDatabaseHelperImplementation();
 	private FirebaseDatabase firebaseDatabase;
 	private DatabaseReference database;
 	private DatabaseReference usersReference;
 	private DatabaseReference messagesReference;
-	private DatabaseReference myMessagesReference; //TODO see how to avoid null
+	private DatabaseReference myMessagesReference;
 	private String myToken;
 	private FirebaseTokenCallback tokenCallback;
 
 	public static FirebaseDatabaseHelper getInstance() {
-		return ourInstance;
+		return instance;
 	}
 
 	private FirebaseDatabaseHelperImplementation() {
 		this.myToken = FirebaseInstanceId.getInstance().getToken();
+		setupReferences();
 	}
 
 	@Override
 	public void registerFCMToken() {
 		this.myToken = FirebaseInstanceId.getInstance().getToken();
-		this.setupReferences();
+	}
+
+	@Override
+	public void initialize(FirebaseMessageInitializationListener listener) {
+
 	}
 
 	@Override
@@ -135,6 +143,34 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 		}
 	}
 
+	@Override
+	public User createNewUser(User user) {
+		DatabaseReference userToken = this.usersReference.child(myToken);
+		userToken.child(KEY_USERNAME).setValue(user.getUsername());
+		user.setMessagesToken(myToken);
+		return user;
+	}
+
+	@Override
+	public void getMyself(UserCallback callback) {
+		DatabaseReference myUserRef = this.usersReference.child(myToken);
+		myUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(DataSnapshot dataSnapshot) {
+				User user = dataSnapshot.getValue(User.class);
+				if(user != null){
+					user.setMessagesToken(myToken);
+				}
+				callback.onUserRetrieved(user);
+			}
+
+			@Override
+			public void onCancelled(DatabaseError databaseError) {
+
+			}
+		});
+	}
+
 	private void setupReferences() {
 		if (this.firebaseDatabase == null) {
 			this.firebaseDatabase = FirebaseDatabase.getInstance();
@@ -145,8 +181,6 @@ public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHel
 		this.messagesReference = this.database.child(KEY_MESSAGES);
 		if (this.myToken != null && !this.myToken.equals("")) {
 			this.myMessagesReference = this.messagesReference.child(myToken);
-			DatabaseReference userToken = this.usersReference.child(myToken);
-			userToken.child(KEY_TOKEN).setValue(myToken);
 		}
 	}
 

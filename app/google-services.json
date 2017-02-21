@@ -1,31 +1,35 @@
 {
   "project_info": {
-    "project_number": "446216690491",
-    "firebase_url": "https://putify-6adfc.firebaseio.com",
-    "project_id": "putify-6adfc",
-    "storage_bucket": "putify-6adfc.appspot.com"
+    "project_number": "373194104390",
+    "firebase_url": "https://putify-89b80.firebaseio.com",
+    "project_id": "putify-89b80",
+    "storage_bucket": "putify-89b80.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:446216690491:android:da9d9ff57c49f8df",
+        "mobilesdk_app_id": "1:373194104390:android:da9d9ff57c49f8df",
         "android_client_info": {
           "package_name": "com.baldev.putify"
         }
       },
       "oauth_client": [
         {
-          "client_id": "446216690491-kv5aen931ugkmatavva6cfd3se86pgm9.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "373194104390-kheib9uhuu6bc02kpikf3muej4fka79b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.baldev.putify",
+            "certificate_hash": "F5734E1DFDB99057EB8BEB39228BFB5A17781522"
+          }
         },
         {
-          "client_id": "446216690491-n0vbkkocqicptgj3cdedtpqa6j19t3ub.apps.googleusercontent.com",
+          "client_id": "373194104390-q4au0jvqkj4v0m8bhqoir8t895273fpr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDHI1y5Ks7cWom6TkbOvalg_4xCXrHCzTI"
+          "current_key": "AIzaSyADvAPwWUtabH--lUUS7O5tR8ZDB5eISuo"
         }
       ],
       "services": {
@@ -33,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373194104390-q4au0jvqkj4v0m8bhqoir8t895273fpr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

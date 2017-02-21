@@ -7,6 +7,7 @@ import com.baldev.putify.helpers.FirebaseDatabaseHelper.FirebaseTokenCallback;
 import com.baldev.putify.helpers.PushNotificationsManager.PushNotificationCallback;
 import com.baldev.putify.model.Message;
 
+@Deprecated
 public class FirebaseMessagesManager implements MessagesManager {
 
 	private final FirebaseDatabaseHelper firebaseDatabaseHelper = FirebaseDatabaseHelperImplementation.getInstance();
@@ -97,12 +98,6 @@ public class FirebaseMessagesManager implements MessagesManager {
 	@Override
 	public void invalidateToken(String token) {
 		this.firebaseDatabaseHelper.invalidateToken(token);
-	}
-
-	public static void registerToken() {
-		FirebaseDatabaseHelper firebaseDatabaseHelper = FirebaseDatabaseHelperImplementation.getInstance();
-		firebaseDatabaseHelper.registerFCMToken();
-		firebaseDatabaseHelper.notifyTokenRegistration();
 	}
 
 }
