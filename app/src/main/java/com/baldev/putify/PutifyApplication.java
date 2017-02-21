@@ -31,14 +31,6 @@ public class PutifyApplication extends Application {
 		initializeFirebaseDatabase();
 
 		appIsReady = !isNullOrEmpty(FirebaseInstanceId.getInstance().getToken());
-
-		RepositoryComponent repositoryComponent = DaggerRepositoryComponent.create();
-
-		appComponent = DaggerAppComponent.builder()
-				.repositoryComponent(repositoryComponent)
-				.messagesManagerModule(new MessagesManagerModule(new FirebaseMessagesManager(this)))
-				.usersManagerModule(new UsersManagerModule(repositoryComponent.getRemoteRepository()))
-				.build();
 	}
 
 	public AppComponent getAppComponent() {
@@ -46,19 +38,29 @@ public class PutifyApplication extends Application {
 	}
 
 	public void waitForInitialization(InitializationListener initializationListener) {
+		this.initializationListener = initializationListener;
 		if (appIsReady) {
-			initializationListener.onInitializationCompleted();
-			this.initializationListener = null;
-		} else {
-			this.initializationListener = initializationListener;
+			initializationCompleted();
 		}
 	}
 
 	public void onFCMTokenRetrieved() {
 		appIsReady = true;
 		if (this.initializationListener != null) {
-			initializationListener.onInitializationCompleted();
+			initializationCompleted();
 		}
+	}
+
+	private void initializationCompleted() {
+		RepositoryComponent repositoryComponent = DaggerRepositoryComponent.create();
+
+		appComponent = DaggerAppComponent.builder()
+				.repositoryComponent(repositoryComponent)
+				.messagesManagerModule(new MessagesManagerModule(new FirebaseMessagesManager(this)))
+				.usersManagerModule(new UsersManagerModule(repositoryComponent.getRemoteRepository()))
+				.build();
+		initializationListener.onInitializationCompleted();
+		this.initializationListener = null;
 	}
 
 	private void initializeFabric() {
@@ -70,7 +72,7 @@ public class PutifyApplication extends Application {
 	}
 
 	private void initializeFirebaseDatabase() {
-		FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+		FirebaseDatabase.getInstance().setPersistenceEnabled(false);
 	}
 
 	public interface InitializationListener {

@@ -1,10 +1,10 @@
 package com.baldev.putify.helpers;
 
 
-import com.baldev.putify.data.FirebaseUsersManager;
 import com.baldev.putify.model.Message;
 import com.baldev.putify.model.User;
 
+@Deprecated
 public interface FirebaseDatabaseHelper {
 	void registerFCMToken();
 

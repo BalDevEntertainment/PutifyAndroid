@@ -1,6 +1,8 @@
 package com.baldev.putify.model;
 
 
+import com.google.common.base.Preconditions;
+
 public class User {
 
 	private String messagesToken;
@@ -11,6 +13,7 @@ public class User {
 	}
 
 	public User(String username) {
+		Preconditions.checkNotNull(username);
 		this.username = username;
 	}
 

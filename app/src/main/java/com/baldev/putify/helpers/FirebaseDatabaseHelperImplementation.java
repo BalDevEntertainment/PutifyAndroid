@@ -14,6 +14,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Deprecated
 public class FirebaseDatabaseHelperImplementation implements FirebaseDatabaseHelper {
 	private static final String KEY_DATABASE = BuildConfig.DATABASE;
 	private static final String KEY_USERS = "users";

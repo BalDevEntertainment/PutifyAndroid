@@ -12,7 +12,6 @@ import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.baldev.putify.helpers.MessagesManager.MessageDeliveryCallback;
 import com.baldev.putify.services.PutifyFCMService;
 
 import org.json.JSONException;
@@ -21,6 +20,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class VolleyHelperImplementation implements PushNotificationsManager {
 
 	private static PushNotificationsManager instance = new VolleyHelperImplementation();

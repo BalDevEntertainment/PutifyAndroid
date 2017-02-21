@@ -20,12 +20,13 @@ public class FirebaseUsersManager implements UsersManager {
 	}
 
 	@Override
-	public void createNewUser(User user) {
-		//FirebaseUsersManager.myself = firebaseDatabaseHelper.createNewUser(user);
+	public void createNewUser(final User user, final CreateUserCallback callback) {
+		remoteRepository.createUser(user, () -> FirebaseUsersManager.myself = user);
+		callback.onUserCreated();
 	}
 
 	@Override
-	public void instantiateMyself(final UserCallback callback) {
+	public void instantiateMyself(final RetrieveUserCallback callback) {
 		if (myself == null) {
 			remoteRepository.getMyself(user -> {
 				myself = user;

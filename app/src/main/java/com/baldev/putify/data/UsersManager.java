@@ -5,13 +5,17 @@ import com.baldev.putify.model.User;
 
 public interface UsersManager {
 
-	void createNewUser(User user);
+	void createNewUser(final User user, final CreateUserCallback callback);
 
 	User getMyself();
 
-	void instantiateMyself(UserCallback callback);
+	void instantiateMyself(RetrieveUserCallback callback);
 
-	interface UserCallback {
+	interface RetrieveUserCallback {
 		void onUserRetrieved(User user);
+	}
+
+	interface CreateUserCallback {
+		void onUserCreated();
 	}
 }

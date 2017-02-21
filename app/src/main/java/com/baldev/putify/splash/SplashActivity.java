@@ -1,16 +1,13 @@
 package com.baldev.putify.splash;
 
 import android.content.Intent;
-import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.baldev.putify.BaseActivity;
 import com.baldev.putify.PutifyApplication;
 import com.baldev.putify.R;
+import com.baldev.putify.UninitializedAppActivity;
 import com.baldev.putify.createuser.CreateUserActivity;
 import com.baldev.putify.splash.SplashMVP.Presenter;
 import com.baldev.putify.splash.SplashMVP.View;
@@ -22,7 +19,12 @@ import butterknife.BindView;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class SplashActivity extends BaseActivity implements View {
+/**
+ * This particular activity inherits from a different class since the Token needs to be retrieved before setting
+ * anything can be set on the component.
+ */
+
+public class SplashActivity extends UninitializedAppActivity implements View {
 
 	@BindView(R.id.logo) ImageView logo;
 
@@ -32,7 +34,8 @@ public class SplashActivity extends BaseActivity implements View {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		((PutifyApplication)getApplication()).waitForInitialization(this::setupComponent);
+		this.setContentView(getLayoutResource());
+		((PutifyApplication) getApplication()).waitForInitialization(this::setupComponent);
 	}
 
 	@Override
@@ -46,13 +49,10 @@ public class SplashActivity extends BaseActivity implements View {
 	}
 
 	@Override
-	public void goToCreateUserActivity() {
+	public void startCreateUserActivity() {
 		Intent intent = new Intent(this, CreateUserActivity.class);
-		ActivityOptionsCompat options = ActivityOptionsCompat.
-				makeSceneTransitionAnimation(this, logo, "profile");
-		if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
-			startActivity(intent, options.toBundle());
-		}
+		ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, logo, "profile");
+		startActivity(intent, options.toBundle());
 	}
 
 	@Override
@@ -63,6 +63,7 @@ public class SplashActivity extends BaseActivity implements View {
 	}
 
 	private void setupComponent() {
+		this.getApplicationComponent().inject(this);
 		DaggerSplashComponent.builder()
 				.appComponent(getApplicationComponent())
 				.splashModule(new SplashModule(this))

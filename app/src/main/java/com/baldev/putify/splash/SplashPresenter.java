@@ -3,9 +3,7 @@ package com.baldev.putify.splash;
 import android.util.Log;
 
 import com.baldev.putify.data.UsersManager;
-import com.baldev.putify.data.UsersManager.UserCallback;
 import com.baldev.putify.helpers.MessagesManager;
-import com.baldev.putify.model.User;
 import com.baldev.putify.splash.SplashMVP.Presenter;
 import com.baldev.putify.splash.SplashMVP.View;
 
@@ -29,7 +27,7 @@ public class SplashPresenter implements Presenter {
 		this.view.setPresenter(this);
 		usersManager.instantiateMyself(user -> {
 			if(user == null){
-				this.view.goToCreateUserActivity();
+				this.view.startCreateUserActivity();
 			} else {
 				Log.e("TEST", user.getUsername());
 			}
@@ -38,7 +36,7 @@ public class SplashPresenter implements Presenter {
 
 	private void getMyself() {
 		if(usersManager.getMyself() == null){
-			this.view.goToCreateUserActivity();
+			this.view.startCreateUserActivity();
 		}
 	}
 

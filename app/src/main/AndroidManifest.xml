@@ -33,6 +33,11 @@
             android:launchMode="singleTop">
         </activity>
 
+        <activity
+            android:name=".main.MainActivity"
+            android:launchMode="singleTop">
+        </activity>
+
         <service
             android:name="com.baldev.putify.services.FCMInstanceIdService">
             <intent-filter>
@@ -49,7 +54,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="8bee4f87a0326b688f681ff4bf3d4d624c3f4499" />
+            android:value="8bee4f87a0326b688f681ff4bf3d4d624c3f4499"/>
     </application>
 
 </manifest>

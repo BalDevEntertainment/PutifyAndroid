@@ -4,6 +4,7 @@ package com.baldev.putify.helpers;
 
 import com.baldev.putify.model.Message;
 
+@Deprecated
 public interface MessagesManager {
 
 	void askForToken(TokenCallback callback);
